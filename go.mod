@@ -14,10 +14,10 @@ require (
 	github.com/containers/buildah v1.20.1-0.20210402144408-36a37402d0c8
 	github.com/containers/common v0.37.0
 	github.com/containers/conmon v2.0.20+incompatible
-	github.com/containers/image/v5 v5.11.1
+	github.com/containers/image/v5 v5.12.0
 	github.com/containers/ocicrypt v1.1.1
 	github.com/containers/psgo v1.5.2
-	github.com/containers/storage v1.30.0
+	github.com/containers/storage v1.30.1
 	github.com/coreos/go-systemd/v22 v22.3.1
 	github.com/coreos/stream-metadata-go v0.0.0-20210225230131-70edb9eb47b3
 	github.com/cri-o/ocicni v0.2.1-0.20210301205850-541cf7c703cf
