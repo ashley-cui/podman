@@ -191,7 +191,7 @@ github.com/containers/psgo/internal/dev
 github.com/containers/psgo/internal/host
 github.com/containers/psgo/internal/proc
 github.com/containers/psgo/internal/process
-# github.com/containers/storage v1.30.0
+# github.com/containers/storage v1.30.2
 github.com/containers/storage
 github.com/containers/storage/drivers
 github.com/containers/storage/drivers/aufs
@@ -384,12 +384,12 @@ github.com/imdario/mergo
 github.com/inconshreveable/mousetrap
 # github.com/ishidawataru/sctp v0.0.0-20191218070446-00ab2ac2db07
 github.com/ishidawataru/sctp
-# github.com/json-iterator/go v1.1.10
+# github.com/json-iterator/go v1.1.11
 github.com/json-iterator/go
 # github.com/juju/ansiterm v0.0.0-20180109212912-720a0952cc2a
 github.com/juju/ansiterm
 github.com/juju/ansiterm/tabwriter
-# github.com/klauspost/compress v1.12.1
+# github.com/klauspost/compress v1.12.2
 github.com/klauspost/compress/flate
 github.com/klauspost/compress/fse
 github.com/klauspost/compress/huff0
@@ -525,11 +525,6 @@ github.com/ostreedev/ostree-go/pkg/otbuiltin
 github.com/pkg/errors
 # github.com/pmezard/go-difflib v1.0.0
 github.com/pmezard/go-difflib/difflib
-# github.com/pquerna/ffjson v0.0.0-20190813045741-dac163c6c0a9
-github.com/pquerna/ffjson/fflib/v1
-github.com/pquerna/ffjson/fflib/v1/internal
-github.com/pquerna/ffjson/inception
-github.com/pquerna/ffjson/shared
 # github.com/prometheus/client_golang v1.7.1
 github.com/prometheus/client_golang/prometheus
 github.com/prometheus/client_golang/prometheus/internal

@@ -17,7 +17,7 @@ require (
 	github.com/containers/image/v5 v5.11.1
 	github.com/containers/ocicrypt v1.1.1
 	github.com/containers/psgo v1.5.2
-	github.com/containers/storage v1.30.0
+	github.com/containers/storage v1.30.2
 	github.com/coreos/go-systemd/v22 v22.3.1
 	github.com/coreos/stream-metadata-go v0.0.0-20210225230131-70edb9eb47b3
 	github.com/cri-o/ocicni v0.2.1-0.20210301205850-541cf7c703cf
@@ -38,7 +38,7 @@ require (
 	github.com/gorilla/schema v1.2.0
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/hpcloud/tail v1.0.0
-	github.com/json-iterator/go v1.1.10
+	github.com/json-iterator/go v1.1.11
 	github.com/mattn/go-colorable v0.1.8 // indirect
 	github.com/moby/term v0.0.0-20201216013528-df9cb8a40635
 	github.com/mrunalp/fileutils v0.5.0
