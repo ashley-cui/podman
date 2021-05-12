@@ -594,7 +594,8 @@ func supportsOverlay(home string, homeMagic graphdriver.FsMagic, rootUID, rootGI
 		_ = idtools.MkdirAs(upperDir, 0700, rootUID, rootGID)
 		_ = idtools.MkdirAs(workDir, 0700, rootUID, rootGID)
 		flags := fmt.Sprintf("lowerdir=%s:%s,upperdir=%s,workdir=%s", lower1Dir, lower2Dir, upperDir, workDir)
-		if selinux.GetEnabled() {
+		if selinux.GetEnabled() &&
+			selinux.SecurityCheckContext(selinuxLabelTest) == nil {
 			// Linux 5.11 introduced unprivileged overlay mounts but it has an issue
 			// when used together with selinux labels.
 			// Check that overlay supports selinux labels as well.
@@ -619,7 +620,7 @@ func supportsOverlay(home string, homeMagic graphdriver.FsMagic, rootUID, rootGI
 		if len(flags) < unix.Getpagesize() {
 			err := unix.Mount("overlay", mergedDir, "overlay", 0, flags)
 			if err == nil {
-				logrus.Errorf("overlay test mount with multiple lowers failed, but succeeded with a single lower")
+				logrus.StandardLogger().Logf(logLevel, "overlay test mount with multiple lowers failed, but succeeded with a single lower")
 				return supportsDType, errors.Wrap(graphdriver.ErrNotSupported, "kernel too old to provide multiple lowers feature for overlay")
 			}
 			logrus.Debugf("overlay test mount with a single lower failed %v", err)
