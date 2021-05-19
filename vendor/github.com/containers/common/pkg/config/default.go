@@ -114,6 +114,9 @@ const (
 	// DefaultSignaturePolicyPath is the default value for the
 	// policy.json file.
 	DefaultSignaturePolicyPath = "/etc/containers/policy.json"
+	// DefaultSubnet is the subnet that will be used for the default CNI
+	// network.
+	DefaultSubnet = "10.88.0.0/16"
 	// DefaultRootlessSignaturePolicyPath is the location within
 	// XDG_CONFIG_HOME of the rootless policy.json file.
 	DefaultRootlessSignaturePolicyPath = "containers/policy.json"
@@ -204,6 +207,7 @@ func DefaultConfig() (*Config, error) {
 		},
 		Network: NetworkConfig{
 			DefaultNetwork:   "podman",
+			DefaultSubnet:    DefaultSubnet,
 			NetworkConfigDir: cniConfig,
 			CNIPluginDirs:    cniBinDir,
 		},
@@ -278,9 +282,20 @@ func defaultConfigFromMemory() (*EngineConfig, error) {
 			"/usr/bin/kata-qemu",
 			"/usr/bin/kata-fc",
 		},
+		"runsc": {
+			"/usr/bin/runsc",
+			"/usr/sbin/runsc",
+			"/usr/local/bin/runsc",
+			"/usr/local/sbin/runsc",
+			"/bin/runsc",
+			"/sbin/runsc",
+			"/run/current-system/sw/bin/runsc",
+		},
 	}
 	// Needs to be called after populating c.OCIRuntimes
-	c.OCIRuntime = c.findRuntime()
+	// Do not emit warnings on OCI runtime: wait for
+	// merged user configuration files
+	c.OCIRuntime = c.findRuntime(false)
 
 	c.ConmonEnvVars = []string{
 		"PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
@@ -299,6 +314,8 @@ func defaultConfigFromMemory() (*EngineConfig, error) {
 	c.RuntimeSupportsJSON = []string{
 		"crun",
 		"runc",
+		"kata",
+		"runsc",
 	}
 	c.RuntimeSupportsNoCgroups = []string{"crun"}
 	c.RuntimeSupportsKVM = []string{"kata", "kata-runtime", "kata-qemu", "kata-fc"}
@@ -314,6 +331,7 @@ func defaultConfigFromMemory() (*EngineConfig, error) {
 	// TODO - ideally we should expose a `type LockType string` along with
 	// constants.
 	c.LockType = "shm"
+	c.MachineEnabled = false
 
 	return c, nil
 }
@@ -523,4 +541,8 @@ func (c *Config) Umask() string {
 // currently k8s-file or journald
 func (c *Config) LogDriver() string {
 	return c.Containers.LogDriver
+}
+
+func (c *Config) MachineEnabled() bool {
+	return c.Engine.MachineEnabled
 }
