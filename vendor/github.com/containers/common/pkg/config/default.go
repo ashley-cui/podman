@@ -82,6 +82,10 @@ var (
 		"/usr/local/lib/cni",
 		"/opt/cni/bin",
 	}
+
+	// DefaultRootlessNetwork is the kind of of rootless networking
+	// for containers
+	DefaultRootlessNetwork = "slirp4netns"
 )
 
 const (
@@ -114,6 +118,9 @@ const (
 	// DefaultSignaturePolicyPath is the default value for the
 	// policy.json file.
 	DefaultSignaturePolicyPath = "/etc/containers/policy.json"
+	// DefaultSubnet is the subnet that will be used for the default CNI
+	// network.
+	DefaultSubnet = "10.88.0.0/16"
 	// DefaultRootlessSignaturePolicyPath is the location within
 	// XDG_CONFIG_HOME of the rootless policy.json file.
 	DefaultRootlessSignaturePolicyPath = "containers/policy.json"
@@ -183,27 +190,29 @@ func DefaultConfig() (*Config, error) {
 				"PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
 				"TERM=xterm",
 			},
-			EnvHost:        false,
-			HTTPProxy:      true,
-			Init:           false,
-			InitPath:       "",
-			IPCNS:          "private",
-			LogDriver:      DefaultLogDriver,
-			LogSizeMax:     DefaultLogSizeMax,
-			NetNS:          netns,
-			NoHosts:        false,
-			PidsLimit:      DefaultPidsLimit,
-			PidNS:          "private",
-			SeccompProfile: SeccompDefaultPath,
-			ShmSize:        DefaultShmSize,
-			TZ:             "",
-			Umask:          "0022",
-			UTSNS:          "private",
-			UserNS:         "host",
-			UserNSSize:     DefaultUserNSSize,
+			EnvHost:            false,
+			HTTPProxy:          true,
+			Init:               false,
+			InitPath:           "",
+			IPCNS:              "private",
+			LogDriver:          DefaultLogDriver,
+			LogSizeMax:         DefaultLogSizeMax,
+			NetNS:              netns,
+			NoHosts:            false,
+			PidsLimit:          DefaultPidsLimit,
+			PidNS:              "private",
+			RootlessNetworking: DefaultRootlessNetwork,
+			SeccompProfile:     SeccompDefaultPath,
+			ShmSize:            DefaultShmSize,
+			TZ:                 "",
+			Umask:              "0022",
+			UTSNS:              "private",
+			UserNS:             "host",
+			UserNSSize:         DefaultUserNSSize,
 		},
 		Network: NetworkConfig{
 			DefaultNetwork:   "podman",
+			DefaultSubnet:    DefaultSubnet,
 			NetworkConfigDir: cniConfig,
 			CNIPluginDirs:    cniBinDir,
 		},
@@ -278,6 +287,15 @@ func defaultConfigFromMemory() (*EngineConfig, error) {
 			"/usr/bin/kata-qemu",
 			"/usr/bin/kata-fc",
 		},
+		"runsc": {
+			"/usr/bin/runsc",
+			"/usr/sbin/runsc",
+			"/usr/local/bin/runsc",
+			"/usr/local/sbin/runsc",
+			"/bin/runsc",
+			"/sbin/runsc",
+			"/run/current-system/sw/bin/runsc",
+		},
 	}
 	// Needs to be called after populating c.OCIRuntimes
 	c.OCIRuntime = c.findRuntime()
@@ -299,6 +317,8 @@ func defaultConfigFromMemory() (*EngineConfig, error) {
 	c.RuntimeSupportsJSON = []string{
 		"crun",
 		"runc",
+		"kata",
+		"runsc",
 	}
 	c.RuntimeSupportsNoCgroups = []string{"crun"}
 	c.RuntimeSupportsKVM = []string{"kata", "kata-runtime", "kata-qemu", "kata-fc"}
@@ -314,6 +334,7 @@ func defaultConfigFromMemory() (*EngineConfig, error) {
 	// TODO - ideally we should expose a `type LockType string` along with
 	// constants.
 	c.LockType = "shm"
+	c.MachineEnabled = false
 
 	return c, nil
 }
@@ -394,9 +415,6 @@ func probeConmon(conmonBinary string) error {
 
 // NetNS returns the default network namespace
 func (c *Config) NetNS() string {
-	if c.Containers.NetNS == "private" && unshare.IsRootless() {
-		return "slirp4netns"
-	}
 	return c.Containers.NetNS
 }
 
@@ -523,4 +541,14 @@ func (c *Config) Umask() string {
 // currently k8s-file or journald
 func (c *Config) LogDriver() string {
 	return c.Containers.LogDriver
+}
+
+func (c *Config) MachineEnabled() bool {
+	return c.Engine.MachineEnabled
+}
+
+// RootlessNetworking returns the "kind" of networking
+// rootless containers should use
+func (c *Config) RootlessNetworking() string {
+	return c.Containers.RootlessNetworking
 }
