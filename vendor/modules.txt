@@ -57,7 +57,7 @@ github.com/container-orchestrated-devices/container-device-interface/pkg
 github.com/container-orchestrated-devices/container-device-interface/specs-go
 # github.com/containerd/cgroups v1.0.1
 github.com/containerd/cgroups/stats/v1
-# github.com/containerd/containerd v1.5.7
+# github.com/containerd/containerd v1.5.9
 github.com/containerd/containerd/errdefs
 github.com/containerd/containerd/log
 github.com/containerd/containerd/pkg/userns
@@ -131,7 +131,7 @@ github.com/containers/common/pkg/umask
 github.com/containers/common/version
 # github.com/containers/conmon v2.0.20+incompatible
 github.com/containers/conmon/runner/config
-# github.com/containers/image/v5 v5.16.1
+# github.com/containers/image/v5 v5.18.0
 github.com/containers/image/v5/copy
 github.com/containers/image/v5/directory
 github.com/containers/image/v5/directory/explicitfilepath
@@ -148,6 +148,7 @@ github.com/containers/image/v5/internal/pkg/keyctl
 github.com/containers/image/v5/internal/pkg/platform
 github.com/containers/image/v5/internal/putblobdigest
 github.com/containers/image/v5/internal/rootless
+github.com/containers/image/v5/internal/streamdigest
 github.com/containers/image/v5/internal/tmpdir
 github.com/containers/image/v5/internal/types
 github.com/containers/image/v5/internal/uploadreader
@@ -288,7 +289,7 @@ github.com/docker/distribution/registry/client/auth/challenge
 github.com/docker/distribution/registry/client/transport
 github.com/docker/distribution/registry/storage/cache
 github.com/docker/distribution/registry/storage/cache/memory
-# github.com/docker/docker v20.10.10+incompatible
+# github.com/docker/docker v20.10.12+incompatible
 github.com/docker/docker/api
 github.com/docker/docker/api/types
 github.com/docker/docker/api/types/blkiodev
@@ -356,7 +357,7 @@ github.com/gogo/protobuf/gogoproto
 github.com/gogo/protobuf/proto
 github.com/gogo/protobuf/protoc-gen-gogo/descriptor
 github.com/gogo/protobuf/sortkeys
-# github.com/golang/groupcache v0.0.0-20200121045136-8c9f03a8e57e
+# github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da
 github.com/golang/groupcache/lru
 # github.com/golang/protobuf v1.5.2
 github.com/golang/protobuf/proto
@@ -404,9 +405,6 @@ github.com/ishidawataru/sctp
 github.com/jinzhu/copier
 # github.com/json-iterator/go v1.1.12
 github.com/json-iterator/go
-# github.com/juju/ansiterm v0.0.0-20180109212912-720a0952cc2a
-github.com/juju/ansiterm
-github.com/juju/ansiterm/tabwriter
 # github.com/klauspost/compress v1.13.6
 github.com/klauspost/compress
 github.com/klauspost/compress/flate
@@ -417,14 +415,10 @@ github.com/klauspost/compress/zstd
 github.com/klauspost/compress/zstd/internal/xxhash
 # github.com/klauspost/pgzip v1.2.5
 github.com/klauspost/pgzip
-# github.com/lunixbochs/vtclean v0.0.0-20180621232353-2d01aacdc34a
-github.com/lunixbochs/vtclean
-# github.com/manifoldco/promptui v0.8.0
+# github.com/manifoldco/promptui v0.9.0
 github.com/manifoldco/promptui
 github.com/manifoldco/promptui/list
 github.com/manifoldco/promptui/screenbuf
-# github.com/mattn/go-colorable v0.1.8
-github.com/mattn/go-colorable
 # github.com/mattn/go-isatty v0.0.14
 github.com/mattn/go-isatty
 # github.com/mattn/go-runewidth v0.0.13
@@ -508,7 +502,7 @@ github.com/onsi/gomega/matchers/support/goraph/util
 github.com/onsi/gomega/types
 # github.com/opencontainers/go-digest v1.0.0
 github.com/opencontainers/go-digest
-# github.com/opencontainers/image-spec v1.0.2-0.20210819154149-5ad6f50d6283
+# github.com/opencontainers/image-spec v1.0.3-0.20211202193544-a5463b7f9c84
 github.com/opencontainers/image-spec/specs-go
 github.com/opencontainers/image-spec/specs-go/v1
 # github.com/opencontainers/runc v1.0.2
@@ -528,7 +522,7 @@ github.com/opencontainers/runtime-tools/generate
 github.com/opencontainers/runtime-tools/generate/seccomp
 github.com/opencontainers/runtime-tools/specerror
 github.com/opencontainers/runtime-tools/validate
-# github.com/opencontainers/selinux v1.9.1
+# github.com/opencontainers/selinux v1.10.0
 github.com/opencontainers/selinux/go-selinux
 github.com/opencontainers/selinux/go-selinux/label
 github.com/opencontainers/selinux/pkg/pwalk
@@ -614,7 +608,7 @@ github.com/vbauerster/mpb/v6
 github.com/vbauerster/mpb/v6/cwriter
 github.com/vbauerster/mpb/v6/decor
 github.com/vbauerster/mpb/v6/internal
-# github.com/vbauerster/mpb/v7 v7.1.5
+# github.com/vbauerster/mpb/v7 v7.3.0
 github.com/vbauerster/mpb/v7
 github.com/vbauerster/mpb/v7/cwriter
 github.com/vbauerster/mpb/v7/decor
@@ -640,7 +634,7 @@ go.opencensus.io/internal
 go.opencensus.io/trace
 go.opencensus.io/trace/internal
 go.opencensus.io/trace/tracestate
-# golang.org/x/crypto v0.0.0-20210711020723-a769d52b0f97
+# golang.org/x/crypto v0.0.0-20211215153901-e495a2d5b3d3
 golang.org/x/crypto/blowfish
 golang.org/x/crypto/cast5
 golang.org/x/crypto/chacha20
@@ -648,6 +642,7 @@ golang.org/x/crypto/curve25519
 golang.org/x/crypto/curve25519/internal/field
 golang.org/x/crypto/ed25519
 golang.org/x/crypto/ed25519/internal/edwards25519
+golang.org/x/crypto/internal/poly1305
 golang.org/x/crypto/internal/subtle
 golang.org/x/crypto/openpgp
 golang.org/x/crypto/openpgp/armor
@@ -656,13 +651,12 @@ golang.org/x/crypto/openpgp/errors
 golang.org/x/crypto/openpgp/packet
 golang.org/x/crypto/openpgp/s2k
 golang.org/x/crypto/pbkdf2
-golang.org/x/crypto/poly1305
 golang.org/x/crypto/ssh
 golang.org/x/crypto/ssh/agent
 golang.org/x/crypto/ssh/internal/bcrypt_pbkdf
 golang.org/x/crypto/ssh/knownhosts
 golang.org/x/crypto/ssh/terminal
-# golang.org/x/net v0.0.0-20210825183410-e898025ed96a
+# golang.org/x/net v0.0.0-20211112202133-69e39bad7dc2
 golang.org/x/net/context
 golang.org/x/net/html
 golang.org/x/net/html/atom
@@ -678,7 +672,7 @@ golang.org/x/net/trace
 # golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
 golang.org/x/sync/errgroup
 golang.org/x/sync/semaphore
-# golang.org/x/sys v0.0.0-20210910150752-751e447fb3d0
+# golang.org/x/sys v0.0.0-20211214234402-4825e8c3871d
 golang.org/x/sys/cpu
 golang.org/x/sys/execabs
 golang.org/x/sys/internal/unsafeheader
@@ -687,7 +681,7 @@ golang.org/x/sys/unix
 golang.org/x/sys/windows
 # golang.org/x/term v0.0.0-20210615171337-6886f2dfbf5b
 golang.org/x/term
-# golang.org/x/text v0.3.6
+# golang.org/x/text v0.3.7
 golang.org/x/text/encoding
 golang.org/x/text/encoding/charmap
 golang.org/x/text/encoding/htmlindex
@@ -710,9 +704,9 @@ golang.org/x/text/unicode/bidi
 golang.org/x/text/unicode/norm
 # golang.org/x/tools v0.1.2
 golang.org/x/tools/go/ast/inspector
-# google.golang.org/genproto v0.0.0-20210602131652-f16073e35f0c
+# google.golang.org/genproto v0.0.0-20211005153810-c76a74d43a8e
 google.golang.org/genproto/googleapis/rpc/status
-# google.golang.org/grpc v1.40.0
+# google.golang.org/grpc v1.41.0
 google.golang.org/grpc
 google.golang.org/grpc/attributes
 google.golang.org/grpc/backoff
@@ -749,6 +743,7 @@ google.golang.org/grpc/internal/status
 google.golang.org/grpc/internal/syscall
 google.golang.org/grpc/internal/transport
 google.golang.org/grpc/internal/transport/networktype
+google.golang.org/grpc/internal/xds/env
 google.golang.org/grpc/keepalive
 google.golang.org/grpc/metadata
 google.golang.org/grpc/peer

@@ -14,7 +14,7 @@ require (
 	github.com/containers/buildah v1.23.1
 	github.com/containers/common v0.46.1-0.20211110143743-73e7b462c358
 	github.com/containers/conmon v2.0.20+incompatible
-	github.com/containers/image/v5 v5.16.1
+	github.com/containers/image/v5 v5.18.0
 	github.com/containers/ocicrypt v1.1.2
 	github.com/containers/psgo v1.7.1
 	github.com/containers/storage v1.37.1-0.20211014130921-5c5bf639ed01
@@ -24,7 +24,7 @@ require (
 	github.com/davecgh/go-spew v1.1.1
 	github.com/digitalocean/go-qemu v0.0.0-20210209191958-152a1535e49f
 	github.com/docker/distribution v2.7.1+incompatible
-	github.com/docker/docker v20.10.10+incompatible
+	github.com/docker/docker v20.10.12+incompatible
 	github.com/docker/go-connections v0.4.0
 	github.com/docker/go-plugins-helpers v0.0.0-20200102110956-c9a8a2d92ccc
 	github.com/docker/go-units v0.4.0
@@ -40,18 +40,17 @@ require (
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/hpcloud/tail v1.0.0
 	github.com/json-iterator/go v1.1.12
-	github.com/mattn/go-colorable v0.1.8 // indirect
 	github.com/mattn/go-isatty v0.0.14
 	github.com/moby/term v0.0.0-20210619224110-3f7ff695adc6
 	github.com/mrunalp/fileutils v0.5.0
 	github.com/onsi/ginkgo v1.16.5
 	github.com/onsi/gomega v1.17.0
 	github.com/opencontainers/go-digest v1.0.0
-	github.com/opencontainers/image-spec v1.0.2-0.20210819154149-5ad6f50d6283
+	github.com/opencontainers/image-spec v1.0.3-0.20211202193544-a5463b7f9c84
 	github.com/opencontainers/runc v1.0.2
 	github.com/opencontainers/runtime-spec v1.0.3-0.20210326190908-1c3f411f0417
 	github.com/opencontainers/runtime-tools v0.9.1-0.20211020193359-09d837bf40a7
-	github.com/opencontainers/selinux v1.9.1
+	github.com/opencontainers/selinux v1.10.0
 	github.com/pkg/errors v0.9.1
 	github.com/pmezard/go-difflib v1.0.0
 	github.com/rootless-containers/rootlesskit v0.14.5
@@ -64,9 +63,9 @@ require (
 	github.com/vbauerster/mpb/v6 v6.0.4
 	github.com/vishvananda/netlink v1.1.1-0.20210330154013-f5de75959ad5
 	go.etcd.io/bbolt v1.3.6
-	golang.org/x/crypto v0.0.0-20210711020723-a769d52b0f97
+	golang.org/x/crypto v0.0.0-20211215153901-e495a2d5b3d3
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
-	golang.org/x/sys v0.0.0-20210910150752-751e447fb3d0
+	golang.org/x/sys v0.0.0-20211214234402-4825e8c3871d
 	gopkg.in/fsnotify.v1 v1.4.7 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
 	k8s.io/api v0.22.3
