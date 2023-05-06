@@ -7,9 +7,14 @@ package os
 type Manager interface {
 	// Apply machine OS changes from an OCI image.
 	Apply(image string, opts ApplyOptions) error
+	Revert(opts RevertOptions) error
 }
 
 // ApplyOptions are the options for applying an image into a Podman machine VM
 type ApplyOptions struct {
 	Image string
+}
+
+type RevertOptions struct {
+	Staged bool
 }

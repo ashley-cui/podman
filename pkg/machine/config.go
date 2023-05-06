@@ -244,6 +244,19 @@ func ConfDirPrefix() (string, error) {
 	return confDir, nil
 }
 
+func OSFileDir() (string, error) {
+	confDirPrefix, err := ConfDirPrefix()
+	if err != nil {
+		return "", err
+	}
+	confDir := filepath.Join(confDirPrefix, "os")
+	if _, err := os.Stat(confDir); !errors.Is(err, os.ErrNotExist) {
+		return confDir, nil
+	}
+	mkdirErr := os.MkdirAll(confDir, 0755)
+	return confDir, mkdirErr
+}
+
 // GuardedRemoveAll functions much like os.RemoveAll but
 // will not delete certain catastrophic paths.
 func GuardedRemoveAll(path string) error {

@@ -20,9 +20,32 @@ type MachineOS struct {
 // Apply applies the image by sshing into the machine and running apply from inside the VM.
 func (m *MachineOS) Apply(image string, opts ApplyOptions) error {
 	sshOpts := machine.SSHOptions{
-		Args: []string{"podman", "machine", "os", "apply", image},
+		Args: []string{"/home/acui/go/src/github.com/containers/podman/bin/podman", "machine", "os", "apply", image},
 	}
 
+	if err := m.VM.SSH(m.VMName, sshOpts); err != nil {
+		return err
+	}
+
+	if m.Restart {
+		if err := m.VM.Stop(m.VMName, machine.StopOptions{}); err != nil {
+			return err
+		}
+		if err := m.VM.Start(m.VMName, machine.StartOptions{NoInfo: true}); err != nil {
+			return err
+		}
+		fmt.Printf("Machine %q restarted successfully\n", m.VMName)
+	}
+	return nil
+}
+
+func (m *MachineOS) Revert(opts RevertOptions) error {
+	sshOpts := machine.SSHOptions{
+		Args: []string{"/home/acui/go/src/github.com/containers/podman/bin/podman", "machine", "os", "revert"},
+	}
+	if opts.Staged {
+		sshOpts.Args = append(sshOpts.Args, "-s")
+	}
 	if err := m.VM.SSH(m.VMName, sshOpts); err != nil {
 		return err
 	}
