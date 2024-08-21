@@ -46,11 +46,7 @@ func Get() (vmconfigs.VMProvider, error) {
 func GetAll(force bool) ([]vmconfigs.VMProvider, error) {
 	providers := []vmconfigs.VMProvider{
 		new(wsl.WSLStubber),
-	}
-	if !wsl.HasAdminRights() && !force {
-		logrus.Warn("managing hyperv machines require admin authority.")
-	} else {
-		providers = append(providers, new(hyperv.HyperVStubber))
+		new(hyperv.HyperVStubber),
 	}
 	return providers, nil
 }
@@ -74,6 +70,22 @@ func InstalledProviders() ([]define.VMType, error) {
 	service.Close()
 
 	return installed, nil
+}
+
+func IsInstalled(provider define.VMType) (bool, error) {
+	switch provider {
+	case define.WSLVirt:
+		return wutil.IsWSLInstalled(), nil
+	case define.HyperVVirt:
+		service, err := hypervctl.NewLocalHyperVService()
+		service.Close()
+		if err == nil {
+			return true, nil
+		}
+		return false, nil
+	default:
+		return false, nil
+	}
 }
 
 // HasPermsForProvider returns whether the host operating system has the proper permissions to use the given provider

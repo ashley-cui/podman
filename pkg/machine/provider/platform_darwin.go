@@ -81,6 +81,25 @@ func InstalledProviders() ([]define.VMType, error) {
 	return installed, nil
 }
 
+func IsInstalled(provider define.VMType) (bool, error) {
+	switch provider {
+	case define.AppleHvVirt:
+		ahv, err := appleHvInstalled()
+		if err != nil {
+			return false, err
+		}
+		return ahv, nil
+	case define.LibKrun:
+		lkr, err := libKrunInstalled()
+		if err != nil {
+			return false, err
+		}
+		return lkr, nil
+	default:
+		return false, nil
+	}
+}
+
 func appleHvInstalled() (bool, error) {
 	var outBuf bytes.Buffer
 	// Apple's Virtualization.Framework is only supported on MacOS 11.0+,

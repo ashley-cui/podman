@@ -49,19 +49,34 @@ func SupportedProviders() []define.VMType {
 
 // InstalledProviders returns the supported providers that are installed on the host
 func InstalledProviders() ([]define.VMType, error) {
-	cfg, err := config.Default()
+	installed, err := IsInstalled(define.QemuVirt)
 	if err != nil {
 		return nil, err
 	}
-	_, err = cfg.FindHelperBinary(qemu.QemuCommand, true)
-	if errors.Is(err, fs.ErrNotExist) {
-		return []define.VMType{}, nil
+	if installed {
+		return []define.VMType{define.QemuVirt}, nil
 	}
-	if err != nil {
-		return nil, err
-	}
+	return []define.VMType{}, nil
+}
 
-	return []define.VMType{define.QemuVirt}, nil
+func IsInstalled(provider define.VMType) (bool, error) {
+	switch provider {
+	case define.QemuVirt:
+		cfg, err := config.Default()
+		if err != nil {
+			return false, err
+		}
+		_, err = cfg.FindHelperBinary(qemu.QemuCommand, true)
+		if errors.Is(err, fs.ErrNotExist) {
+			return false, nil
+		}
+		if err != nil {
+			return false, err
+		}
+		return true, nil
+	default:
+		return false, nil
+	}
 }
 
 // HasPermsForProvider returns whether the host operating system has the proper permissions to use the given provider
