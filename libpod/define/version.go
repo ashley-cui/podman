@@ -16,6 +16,9 @@ var (
 	// BuildInfo is the time at which the binary was built
 	// It will be populated by the Makefile.
 	buildInfo string
+	// BuiltFor is the packager of the binary.
+	// It will be populated at build-time.
+	builtFor string
 )
 
 // Version is an output struct for API
@@ -26,6 +29,7 @@ type Version struct {
 	GitCommit  string
 	BuiltTime  string
 	Built      int64
+	BuiltFor   string `json:",omitempty" yaml:",omitempty"`
 	OsArch     string
 	Os         string
 }
@@ -49,6 +53,7 @@ func GetVersion() (Version, error) {
 		GitCommit:  gitCommit,
 		BuiltTime:  time.Unix(buildTime, 0).Format(time.ANSIC),
 		Built:      buildTime,
+		BuiltFor:   builtFor,
 		OsArch:     runtime.GOOS + "/" + runtime.GOARCH,
 		Os:         runtime.GOOS,
 	}, nil

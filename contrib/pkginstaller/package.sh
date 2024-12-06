@@ -9,6 +9,7 @@ PRODUCTSIGN_IDENTITY=${PRODUCTSIGN_IDENTITY:-mock}
 NO_CODESIGN=${NO_CODESIGN:-0}
 HELPER_BINARIES_DIR="/opt/podman/bin"
 MACHINE_POLICY_JSON_DIR="/opt/podman/config"
+BUILT_FOR="pkginstaller"
 
 tmpBin="contrib/pkginstaller/tmp-bin"
 
@@ -42,7 +43,7 @@ function build_podman() {
 }
 
 function build_podman_arch(){
-    make -B GOARCH="$1" podman-remote HELPER_BINARIES_DIR="${HELPER_BINARIES_DIR}"
+    make -B GOARCH="$1" podman-remote HELPER_BINARIES_DIR="${HELPER_BINARIES_DIR}" BUILT_FOR="${BUILT_FOR}"
     make -B GOARCH="$1" podman-mac-helper
     mkdir -p "${tmpBin}"
     cp bin/darwin/podman "${tmpBin}/podman-$1"

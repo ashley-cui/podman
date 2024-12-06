@@ -6,6 +6,7 @@ type clientInfo struct {
 	OSArch   string `json:"OS"`
 	Provider string `json:"provider"`
 	Version  string `json:"version"`
+	BuiltFor string `json:"builtFor,omitempty" yaml:",omitempty"`
 }
 
 func getClientInfo() (*clientInfo, error) {
@@ -21,5 +22,6 @@ func getClientInfo() (*clientInfo, error) {
 		OSArch:   vinfo.OsArch,
 		Provider: p,
 		Version:  vinfo.Version,
+		BuiltFor: vinfo.BuiltFor,
 	}, nil
 }
