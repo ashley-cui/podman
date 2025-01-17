@@ -61,7 +61,7 @@ type ContainerEngine interface { //nolint:interfacebloat
 	GenerateKube(ctx context.Context, nameOrIDs []string, opts GenerateKubeOptions) (*GenerateKubeReport, error)
 	SystemPrune(ctx context.Context, options SystemPruneOptions) (*SystemPruneReport, error)
 	HealthCheckRun(ctx context.Context, nameOrID string, options HealthCheckOptions) (*define.HealthCheckResults, error)
-	Info(ctx context.Context) (*define.Info, error)
+	Info(ctx context.Context) (*SystemInfoReport, error)
 	KubeApply(ctx context.Context, body io.Reader, opts ApplyOptions) error
 	Locks(ctx context.Context) (*LocksReport, error)
 	Migrate(ctx context.Context, options SystemMigrateOptions) error

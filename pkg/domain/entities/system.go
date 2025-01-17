@@ -20,6 +20,7 @@ type SystemVersionReport = types.SystemVersionReport
 type SystemUnshareOptions = types.SystemUnshareOptions
 type ComponentVersion = types.SystemComponentVersion
 type ListRegistriesReport = types.ListRegistriesReport
+type SystemInfoReport = types.SystemInfoReport
 
 type AuthConfig = types.AuthConfig
 type AuthReport = types.AuthReport

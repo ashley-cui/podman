@@ -4,12 +4,11 @@ import (
 	"context"
 	"errors"
 
-	"github.com/containers/podman/v5/libpod/define"
 	"github.com/containers/podman/v5/pkg/bindings/system"
 	"github.com/containers/podman/v5/pkg/domain/entities"
 )
 
-func (ic *ContainerEngine) Info(ctx context.Context) (*define.Info, error) {
+func (ic *ContainerEngine) Info(ctx context.Context) (*entities.SystemInfoReport, error) {
 	return system.Info(ic.ClientCtx, nil)
 }
 

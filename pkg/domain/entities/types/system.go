@@ -55,6 +55,11 @@ type SystemPruneReport struct {
 	ReclaimedSpace        uint64
 }
 
+type SystemInfoReport struct {
+	define.Info
+	Client define.Version
+}
+
 // SystemMigrateOptions describes the options needed for the
 // cli to migrate runtimes of containers
 type SystemMigrateOptions struct {
