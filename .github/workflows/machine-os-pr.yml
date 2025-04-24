@@ -127,10 +127,14 @@ jobs:
         if: steps.getversion.outputs.update == 'true' && steps.checkpr.outputs.openpr == 'true'
         id: pr
         run: |
+          body=$(printf \
+          'Triggered by https://github.com/%s/pull/%s\n\n```release-note\nRelease %s\n```\n' \
+          "$PODMAN_REPO" "${{github.event.number}}" "v${{ steps.getversion.outputs.version }}")
+
           bumpbranch="pr${{github.event.number}}"
           uri=`gh pr create \
             --title "Bump Podman to v${{ steps.getversion.outputs.version }}" \
-            --body  "Triggered by https://github.com/$PODMAN_REPO/pull/${{github.event.number}}" \
+            --body "$body" \
             --head "podmanbot:$bumpbranch" \
             --base "${{github.base_ref}}" \
             --repo $UPSTREAM_MACHINE_OS`
