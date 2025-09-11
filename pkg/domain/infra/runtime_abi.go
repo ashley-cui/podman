@@ -18,7 +18,7 @@ func NewContainerEngine(facts *entities.PodmanConfig) (entities.ContainerEngine,
 		r, err := NewLibpodRuntime(facts.FlagSet, facts)
 		return r, err
 	case entities.TunnelMode:
-		ctx, err := bindings.NewConnectionWithOptions(context.Background(), bindings.Options{
+		ctx, err := bindings.NewConnectionWithOptions(context.Background(), bindings.ConnectionOptions{
 			URI:         facts.URI,
 			Identity:    facts.Identity,
 			TLSCertFile: facts.TLSCertFile,
@@ -39,7 +39,7 @@ func NewImageEngine(facts *entities.PodmanConfig) (entities.ImageEngine, error) 
 		return r, err
 	case entities.TunnelMode:
 		// TODO: look at me!
-		ctx, err := bindings.NewConnectionWithOptions(context.Background(), bindings.Options{
+		ctx, err := bindings.NewConnectionWithOptions(context.Background(), bindings.ConnectionOptions{
 			URI:         facts.URI,
 			Identity:    facts.Identity,
 			TLSCertFile: facts.TLSCertFile,

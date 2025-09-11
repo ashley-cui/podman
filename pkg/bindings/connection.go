@@ -84,7 +84,7 @@ func JoinURL(elements ...string) string {
 
 // NewConnection creates a new service connection without an identity
 func NewConnection(ctx context.Context, uri string) (context.Context, error) {
-	return NewConnectionWithOptions(ctx, Options{URI: uri})
+	return NewConnectionWithOptions(ctx, ConnectionOptions{URI: uri})
 }
 
 // NewConnectionWithIdentity takes a URI as a string and returns a context with the
@@ -96,10 +96,10 @@ func NewConnection(ctx context.Context, uri string) (context.Context, error) {
 // or unix:///run/podman/podman.sock
 // or ssh://<user>@<host>[:port]/run/podman/podman.sock
 func NewConnectionWithIdentity(ctx context.Context, uri string, identity string, machine bool) (context.Context, error) {
-	return NewConnectionWithOptions(ctx, Options{URI: uri, Identity: identity, Machine: machine})
+	return NewConnectionWithOptions(ctx, ConnectionOptions{URI: uri, Identity: identity, Machine: machine})
 }
 
-type Options struct {
+type ConnectionOptions struct {
 	URI         string
 	Identity    string
 	TLSCertFile string
@@ -116,47 +116,41 @@ func orEnv(s string, env string) string {
 	return s
 }
 
-func NewConnectionWithOptions(ctx context.Context, opts Options) (context.Context, error) {
+func NewConnectionWithOptions(ctx context.Context, opts ConnectionOptions) (context.Context, error) {
 	var err error
 
-	uri := orEnv(opts.URI, "CONTAINER_HOST")
-	identity := orEnv(opts.Identity, "CONTAINER_SSHKEY")
-	tlsCertFile := orEnv(opts.TLSCertFile, "CONTAINER_TLS_CERT")
-	tlsKeyFile := orEnv(opts.TLSKeyFile, "CONTAINER_TLS_KEY")
-	tlsCAFile := orEnv(opts.TLSCAFile, "CONTAINER_TLS_CA")
-
-	_url, err := url.Parse(uri)
+	_url, err := url.Parse(opts.URI)
 	if err != nil {
-		return nil, fmt.Errorf("value of CONTAINER_HOST is not a valid url: %s: %w", uri, err)
+		return nil, fmt.Errorf("%s is not a valid url: %s: %w", opts.URI, err)
 	}
 
 	// Now we set up the http Client to use the connection above
 	var connection Connection
 	switch _url.Scheme {
 	case "ssh":
-		conn, err := sshClient(_url, uri, identity, opts.Machine)
+		conn, err := sshClient(_url, opts.URI, opts.Identity, opts.Machine)
 		if err != nil {
 			return nil, err
 		}
 		connection = conn
 	case "unix":
-		if !strings.HasPrefix(uri, "unix:///") {
+		if !strings.HasPrefix(opts.URI, "unix:///") {
 			// autofix unix://path_element vs unix:///path_element
 			_url.Path = JoinURL(_url.Host, _url.Path)
 			_url.Host = ""
 		}
 		connection = unixClient(_url)
 	case "tcp":
-		if !strings.HasPrefix(uri, "tcp://") {
+		if !strings.HasPrefix(opts.URI, "tcp://") {
 			return nil, errors.New("tcp URIs should begin with tcp://")
 		}
-		conn, err := tcpClient(_url, tlsCertFile, tlsKeyFile, tlsCAFile)
+		conn, err := tcpClient(_url, opts.TLSCertFile, opts.TLSKeyFile, opts.TLSCAFile)
 		if err != nil {
 			return nil, newConnectError(err)
 		}
 		connection = conn
 	default:
-		return nil, fmt.Errorf("unable to create connection. %q is not a supported schema. %#v %s %s", _url.Scheme, opts, uri, _url.String())
+		return nil, fmt.Errorf("unable to create connection. %q is not a supported schema. %#v %s %s", _url.Scheme, opts, opts.URI, _url.String())
 	}
 
 	ctx = context.WithValue(ctx, clientKey, &connection)
