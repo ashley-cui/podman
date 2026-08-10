@@ -505,6 +505,16 @@ func Connect(w http.ResponseWriter, r *http.Request) {
 				net.HardwareAddr(netConnect.EndpointConfig.MacAddress),
 			)
 		}
+
+		// Docker API v1.46+: pass per-interface sysctls from DriverOpts
+		// through to NetworkConnect which applies them after the interface
+		// is created in the container's network namespace.
+		if sysctlVal, ok := netConnect.EndpointConfig.DriverOpts["com.docker.network.endpoint.sysctls"]; ok && sysctlVal != "" {
+			if netOpts.Options == nil {
+				netOpts.Options = make(map[string]string)
+			}
+			netOpts.Options[define.EndpointSysctlsOption] = sysctlVal
+		}
 	}
 	err := runtime.ConnectContainerToNetwork(netConnect.Container, name, netOpts)
 	if err != nil {
