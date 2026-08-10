@@ -55,6 +55,10 @@ const (
 	ContainerInitPath = "/run/podman-init"
 )
 
+// EndpointSysctlsOption is the key used in PerNetworkOptions.Options to carry
+// per-interface sysctls from the Docker compat API (com.docker.network.endpoint.sysctls).
+const EndpointSysctlsOption = "endpoint_sysctls"
+
 // Kubernetes Kinds
 const (
 	// A Pod kube yaml spec
