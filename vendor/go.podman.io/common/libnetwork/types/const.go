@@ -47,6 +47,10 @@ const (
 	NoDefaultRoute = "no_default_route"
 	BclimOption    = "bclim"
 	VRFOption      = "vrf"
+	// PerIFSysctl is the key in PerNetworkOptions.Options for per-interface
+	// sysctls. The value is a comma-separated list of sysctl=value pairs
+	// where IFNAME is used as a placeholder for the actual interface name.
+	PerIFSysctl = "per_if_sysctl"
 )
 
 type NetworkBackend string

@@ -507,13 +507,12 @@ func Connect(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// Docker API v1.46+: pass per-interface sysctls from DriverOpts
-		// through to NetworkConnect which applies them after the interface
-		// is created in the container's network namespace.
+		// through to libnetwork which will resolve IFNAME and apply them.
 		if sysctlVal, ok := netConnect.EndpointConfig.DriverOpts["com.docker.network.endpoint.sysctls"]; ok && sysctlVal != "" {
 			if netOpts.Options == nil {
 				netOpts.Options = make(map[string]string)
 			}
-			netOpts.Options[define.EndpointSysctlsOption] = sysctlVal
+			netOpts.Options[nettypes.PerIFSysctl] = sysctlVal
 		}
 	}
 	err := runtime.ConnectContainerToNetwork(netConnect.Container, name, netOpts)

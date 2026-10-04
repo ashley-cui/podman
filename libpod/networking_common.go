@@ -619,12 +619,6 @@ func (c *Container) NetworkConnect(nameOrID, netName string, netOpts types.PerNe
 		return errors.New("when adding aliases, results must be of length 1")
 	}
 
-	if sysctlVal, ok := netOpts.Options[define.EndpointSysctlsOption]; ok && sysctlVal != "" {
-		if err := applyEndpointSysctls(c.state.NetNS, netOpts.InterfaceName, sysctlVal); err != nil {
-			return fmt.Errorf("applying endpoint sysctls for network %s: %w", netName, err)
-		}
-	}
-
 	// we need to get the old host entries before we add the new one to the status
 	// if we do not add do it here we will get the wrong existing entries which will throw of the logic
 	// we could also copy the map but this does not seem worth it

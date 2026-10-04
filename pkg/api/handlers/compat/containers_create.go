@@ -419,7 +419,6 @@ func cliOpts(cc handlers.CreateContainerConfig, rtc *config.Config) (*entities.C
 	containerMacAddress := cc.MacAddress
 
 	// network names
-	ifIndex := 0
 	switch {
 	case len(cc.NetworkingConfig.EndpointsConfig) > 0:
 		endpointsConfig := cc.NetworkingConfig.EndpointsConfig
@@ -458,27 +457,12 @@ func cliOpts(cc handlers.CreateContainerConfig, rtc *config.Config) (*entities.C
 				}
 
 				// Docker API v1.46+: handle per-interface sysctls from DriverOpts.
-				// Docker's com.docker.network.endpoint.sysctls uses IFNAME as a
-				// placeholder for the container's interface name on this network.
-				// We resolve IFNAME here and merge the sysctls into the container-
-				// level HostConfig.Sysctls so they are applied via the OCI spec.
+				// Pass through to libnetwork which will resolve IFNAME and apply them.
 				if sysctlVal, ok := endpoint.DriverOpts["com.docker.network.endpoint.sysctls"]; ok && sysctlVal != "" {
-					ifName := netOpts.InterfaceName
-					if ifName == "" {
-						ifName = fmt.Sprintf("eth%d", ifIndex)
-						netOpts.InterfaceName = ifName
+					if netOpts.Options == nil {
+						netOpts.Options = make(map[string]string)
 					}
-					if cc.HostConfig.Sysctls == nil {
-						cc.HostConfig.Sysctls = make(map[string]string)
-					}
-					for _, sysctl := range strings.Split(sysctlVal, ",") {
-						parts := strings.SplitN(sysctl, "=", 2)
-						if len(parts) != 2 {
-							return nil, nil, fmt.Errorf("invalid sysctl format in com.docker.network.endpoint.sysctls: %q", sysctl)
-						}
-						key := strings.Replace(parts[0], "IFNAME", ifName, 1)
-						cc.HostConfig.Sysctls[key] = parts[1]
-					}
+					netOpts.Options[types.PerIFSysctl] = sysctlVal
 				}
 			}
 
@@ -493,7 +477,6 @@ func cliOpts(cc handlers.CreateContainerConfig, rtc *config.Config) (*entities.C
 				// only when really using the bridge mode.
 				networks[netName] = netOpts
 			}
-			ifIndex++
 		}
 
 		netInfo.Networks = networks

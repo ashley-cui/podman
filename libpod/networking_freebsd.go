@@ -224,7 +224,3 @@ func (c *Container) inspectJoinedNetworkNS(_ string) (q types.StatusBlock, retEr
 func (c *Container) reloadRootlessRLKPortMapping() error {
 	return errors.New("unsupported (*Container).reloadRootlessRLKPortMapping")
 }
-
-func applyEndpointSysctls(_, _, _ string) error {
-	return errors.New("per-endpoint sysctls are not supported on FreeBSD")
-}

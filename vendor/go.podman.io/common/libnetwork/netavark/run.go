@@ -158,6 +158,12 @@ func (n *netavarkNetwork) Setup(namespacePath string, options types.SetupOptions
 		}
 	}
 
+	// Apply per-interface sysctls from PerNetworkOptions.Options.
+	// This happens after netavark has created the interfaces in the container netns.
+	if err := applyPerIFSysctls(namespacePath, options.Networks); err != nil {
+		return nil, err
+	}
+
 	return result, err
 }
 

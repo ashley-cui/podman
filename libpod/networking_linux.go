@@ -5,7 +5,6 @@ package libpod
 import (
 	"fmt"
 	"net"
-	"os"
 	"strings"
 
 	"github.com/opencontainers/runtime-spec/specs-go"
@@ -198,27 +197,6 @@ func getContainerNetIO(ctr *Container) (map[string]define.ContainerNetworkStats,
 		return nil
 	})
 	return perNetworkStats, err
-}
-
-// applyEndpointSysctls applies per-interface sysctls inside the container's
-// network namespace. The sysctlVal is a comma-separated list of sysctl
-// assignments with IFNAME as an interface placeholder (Docker API v1.46+
-// com.docker.network.endpoint.sysctls convention).
-func applyEndpointSysctls(netNSPath, ifName, sysctlVal string) error {
-	return netns.WithNetNSPath(netNSPath, func(_ netns.NetNS) error {
-		for _, sysctl := range strings.Split(sysctlVal, ",") {
-			parts := strings.SplitN(sysctl, "=", 2)
-			if len(parts) != 2 {
-				return fmt.Errorf("invalid sysctl format in endpoint sysctls: %q", sysctl)
-			}
-			key := strings.Replace(parts[0], "IFNAME", ifName, 1)
-			path := "/proc/sys/" + strings.ReplaceAll(key, ".", "/")
-			if err := os.WriteFile(path, []byte(parts[1]), 0o644); err != nil {
-				return fmt.Errorf("setting sysctl %s=%s: %w", key, parts[1], err)
-			}
-		}
-		return nil
-	})
 }
 
 func getNetStatsFromNetlinkStats(stats *netlink.LinkStatistics) define.ContainerNetworkStats {
