@@ -1205,32 +1205,36 @@ podman network rm -f dnstest dnstest2
 #
 # Docker API v1.46+: per-interface sysctls via DriverOpts
 #
-skip_if_rootless "Network sysctls not available rootless"
+podman network rm -f sysctlnet 2>/dev/null || true
 podman network create sysctlnet
 
 # Container create: endpoint sysctls in NetworkingConfig
-t POST containers/create \
-  Image=$IMAGE \
-  Cmd='["cat","/proc/sys/net/ipv4/conf/eth0/log_martians"]' \
-  NetworkingConfig='{"EndpointsConfig":{"sysctlnet":{"DriverOpts":{"com.docker.network.endpoint.sysctls":"net.ipv4.conf.IFNAME.log_martians=1"}}}}' \
-  201
+t POST containers/create Image=$IMAGE Cmd='["sleep","999"]' NetworkingConfig='{"EndpointsConfig":{"sysctlnet":{"DriverOpts":{"com.docker.network.endpoint.sysctls":"net.ipv4.conf.IFNAME.log_martians=1"}}}}' 201
 cid1=$(jq -r '.Id' <<<"$output")
 t POST containers/$cid1/start 204
-t POST containers/$cid1/wait 200
-t GET containers/$cid1/logs?stdout=true 200
-like "$(<$WORKDIR/curl.result.out)" "1" "sysctl applied via container create"
-t DELETE containers/$cid1 204
+sleep 2
+
+# Verify sysctl was applied to eth0
+eth0_val=$($PODMAN_BIN --root $WORKDIR/server_root exec $cid1 cat /proc/sys/net/ipv4/conf/eth0/log_martians 2>/dev/null)
+is "$eth0_val" "1" "sysctl applied to eth0"
+
+# Verify it's interface-specific by checking lo is still 0
+lo_val=$($PODMAN_BIN --root $WORKDIR/server_root exec $cid1 cat /proc/sys/net/ipv4/conf/lo/log_martians 2>/dev/null)
+is "$lo_val" "0" "sysctl not applied to lo"
+t DELETE containers/$cid1?force=true 204
 
 # Network connect: endpoint sysctls in EndpointConfig.DriverOpts
 t POST containers/create Image=$IMAGE Cmd='["top"]' 201
 cid2=$(jq -r '.Id' <<<"$output")
 t POST containers/$cid2/start 204
-t POST networks/sysctlnet/connect \
-  Container=$cid2 \
-  EndpointConfig='{"DriverOpts":{"com.docker.network.endpoint.sysctls":"net.ipv4.conf.IFNAME.log_martians=1"}}' \
-  200
-output=$(podman exec $cid2 cat /proc/sys/net/ipv4/conf/eth1/log_martians)
-is "$output" "1" "sysctl applied via network connect"
+t POST networks/sysctlnet/connect Container=$cid2 EndpointConfig='{"DriverOpts":{"com.docker.network.endpoint.sysctls":"net.ipv4.conf.IFNAME.log_martians=1"}}' 200
+sleep 1
+
+# Verify sysctl applied only to the connected interface (eth1), not default interface (eth0)
+eth1_val=$($PODMAN_BIN --root $WORKDIR/server_root exec $cid2 cat /proc/sys/net/ipv4/conf/eth1/log_martians 2>/dev/null)
+eth0_val=$($PODMAN_BIN --root $WORKDIR/server_root exec $cid2 cat /proc/sys/net/ipv4/conf/eth0/log_martians 2>/dev/null)
+is "$eth1_val" "1" "sysctl applied to eth1"
+is "$eth0_val" "0" "sysctl not applied to eth0"
 t DELETE containers/$cid2?force=true 204
 
 podman network rm -f sysctlnet
